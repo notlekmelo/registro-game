@@ -1,0 +1,332 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Documentação Swagger do prjeto de registro de game",
+        "version": "1.0.0",
+        "title": "registro_game",
+        "contact": {
+            "email": "keltonmof@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "schemes": [
+        "http"
+    ],
+    "host": "189.71.244.238:3000",
+    "basePath": "/",
+    "paths": {
+        "/iniciar": {
+            "post": {
+                "summary": "Registra o usuário que vai jogar",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Objeto Resposta",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/postIniciarJogo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Jogador Registrado com Sucesso",
+                        "schema": {
+                            "$ref": "#/definitions/responseIniciarJogo"
+                        }
+                    },
+                    "400": {
+                        "description": "Erro ao processar requisição",
+                        "schema": {
+                            "$ref": "#/definitions/responsePadrao"
+                        }
+                    },
+                    "422": {
+                        "description": "Erro ao processar nome do usuário",
+                        "schema": {
+                            "$ref": "#/definitions/responsePadrao"
+                        }
+                    }
+                }
+            }
+        },
+        "/verificar-inicio": {
+            "post": {
+                "summary": "Valida se pode começar a jogar",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Objeto Resposta",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/postPadraoJogo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retorno correto da validação",
+                        "schema": {
+                            "$ref": "#/definitions/postValidarInicioResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Erro ao processar requisição",
+                        "schema": {
+                            "$ref": "#/definitions/responsePadrao"
+                        }
+                    },
+                    "422": {
+                        "description": "Erro ao processar nome do usuário",
+                        "schema": {
+                            "$ref": "#/definitions/responsePadrao"
+                        }
+                    }
+                }
+            }
+        },
+        "/finalizar": {
+            "post": {
+                "summary": "Finaliza sua jogada",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Objeto Resposta",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/postPadraoJogo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retorno correto da validação",
+                        "schema": {
+                            "$ref": "#/definitions/postFinalizacaoResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Erro ao processar requisição",
+                        "schema": {
+                            "$ref": "#/definitions/responsePadrao"
+                        }
+                    },
+                    "422": {
+                        "description": "Erro ao processar nome do usuário",
+                        "schema": {
+                            "$ref": "#/definitions/responsePadrao"
+                        }
+                    }
+                }
+            }
+        },
+        "/validar-resultados": {
+            "post": {
+                "summary": "Verifica qual foi o placar final da partida",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Objeto Resposta",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/postConferirResultados"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retorno correto da validação",
+                        "schema": {
+                            "$ref": "#/definitions/postConferirResultadosResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Erro ao processar requisição",
+                        "schema": {
+                            "$ref": "#/definitions/responsePadrao"
+                        }
+                    },
+                    "422": {
+                        "description": "Erro ao processar nome do usuário",
+                        "schema": {
+                            "$ref": "#/definitions/responsePadrao"
+                        }
+                    }
+                }
+            }
+        },
+        "/reset": {
+            "post": {
+                "summary": "Reinicia o arquivo",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retorno correto da validação",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "statusCode": {
+                                    "type": "integer"
+                                },
+                                "reset": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "responsePadrao": {
+            "type": "object",
+            "properties": {
+                "statusCode": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "responseIniciarJogo": {
+            "type": "object",
+            "properties": {
+                "statusCode": {
+                    "type": "integer"
+                },
+                "numeroJogador": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "postIniciarJogo": {
+            "type": "object",
+            "required": ["Nome"],
+            "properties": {
+                "Nome": {
+                    "type": "string"
+                }
+            }
+        },
+        "postPadraoJogo": {
+            "type": "object",
+            "required": ["Nome", "NumeroJogador"],
+            "properties": {
+                "NumeroJogador": {
+                    "type": "integer"
+                },
+                "Nome": {
+                    "type": "string"
+                }
+            }
+        },
+        "postConferirResultados": {
+            "type": "object",
+            "properties": {
+                "NumeroJogador": {
+                    "type": "integer"
+                },
+                "Nome": {
+                    "type": "string"
+                }
+            }
+        },
+        "postValidarInicioResponse": {
+            "type": "object",
+            "properties": {
+                "statusCode": {
+                    "type": "integer"
+                },
+                "podeIniciar": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "postFinalizacaoResponse": {
+            "type": "object",
+            "properties": {
+                "statusCode": {
+                    "type": "integer"
+                },
+                "finalizado": {
+                    "type": "boolean"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "postConferirResultadosResponse": {
+            "type": "object",
+            "properties": {
+                "statusCode": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "resultados": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "Jogador": {
+                                "type": "integer"
+                            },
+                            "Nome": {
+                                "type": "string"
+                            },
+                            "Tempo": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
