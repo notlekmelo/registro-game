@@ -11,14 +11,28 @@ export const validarInicioJogo = (body: any, callback: Function) => {
             if (arquivo.length == 1) {
                 arquivo.push('Jogador 1: ' + body.Nome + '\n' + new Date().toISOString())
                 numeroJogador = 1;
+                fs.writeFileSync(caminhoArquivo, arquivo.join('\n'))
+                callback(null, numeroJogador, 'Você está na fila para jogar, por favor aguarde.')
             }
             else {
+                const horaUltimoJogador = new Date(arquivo[arquivo.length-1]);
+                const agora = new Date();
+                const diferencaTempo = (agora.getTime() - horaUltimoJogador.getTime()) / 1000;
                 const quantidadeJogadores = Number(arquivo[arquivo.length-2].substring(8,9)) + 1;
-                arquivo[arquivo.length-1] = 'Jogador ' + quantidadeJogadores + ': ' + body.Nome + '\n' + new Date().toISOString();
-                numeroJogador = quantidadeJogadores;
+
+                if (diferencaTempo > 10 && quantidadeJogadores > 2) {
+                    callback(null, 0, 'A partida já vai iniciar, aguarde a próxima partida.')
+                }
+                else if (quantidadeJogadores == 6) {
+                    callback(null, 0, 'A partida já está cheia.')
+                } 
+                else {
+                    arquivo[arquivo.length-1] = 'Jogador ' + quantidadeJogadores + ': ' + body.Nome + '\n' + new Date().toISOString();
+                    numeroJogador = quantidadeJogadores;
+                    fs.writeFileSync(caminhoArquivo, arquivo.join('\n'))
+                    callback(null, numeroJogador, 'Você está na fila para jogar, por favor aguarde.')
+                }
             }
-            fs.writeFileSync(caminhoArquivo, arquivo.join('\n'))
-            callback(null, numeroJogador, 'Você está na fila para jogar, por favor aguarde.')
         }
         else {
             callback(null, 0, "O jogo já começou, por favor aguarde.")
@@ -77,6 +91,9 @@ export const finalizado = (body: any, callback: Function) => {
                 const agora = new Date();
                 const diferencaTempo = (agora.getTime() - horaIniciada.getTime()) / 1000
 
+                const minutos = Math.floor(diferencaTempo / 60);
+                const tempo = minutos + ' minuto(s) e ' + Math.floor(diferencaTempo - (minutos * 60)) + ' segundo(s).' 
+
                 arquivo[body.NumeroJogador] = arquivo[body.NumeroJogador].substring(0, indexSinal+1) + diferencaTempo + ' segundos;'
                 
                 fs.writeFileSync(caminhoArquivo, arquivo.join('\n'))
@@ -91,7 +108,7 @@ export const finalizado = (body: any, callback: Function) => {
                     arquivo[0] = 'Partida Finalizada.'
                 }
                 fs.writeFileSync(caminhoArquivo, arquivo.join('\n'))
-                callback(null, true, 'Você terminou em ' + diferencaTempo + ' segundos')
+                callback(null, true, 'Você terminou em ' + tempo)
             }
             else {
                 callback(null, false, "Esse jogador não está na partida.")
@@ -135,10 +152,15 @@ export const rotaResultado = (body: any, callback: Function) => {
                 table.push({
                     Jogador: arquivo[i].substring(8, arquivo[i].indexOf(':')),
                     Nome: arquivo[i].substring(arquivo[i].indexOf(':')+1, arquivo[i].indexOf(';')-1),
-                    Tempo: arquivo[i].substring(arquivo[i].indexOf(';')+1, arquivo[i].lastIndexOf(';')), 
+                    Tempo: arquivo[i].substring(arquivo[i].indexOf(';')+1, arquivo[i].lastIndexOf(';')),
                 })
             } 
             table.sort((a,b) => Number(a.Tempo.substring(0, a.Tempo.indexOf(' '))) - Number(b.Tempo.substring(0, b.Tempo.indexOf(' '))))
+            table.forEach(item => {
+                const segundos = Number(item.Tempo.substring(0, item.Tempo.indexOf(' ')));
+                const minutos = Math.floor(segundos / 60);
+                item.Tempo = minutos + ' minuto(s) e ' + Math.floor(segundos - minutos * 60) + ' segundo(s)'
+            })
             callback(null, '', table)
         }
         else {
