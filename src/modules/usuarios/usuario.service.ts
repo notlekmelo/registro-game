@@ -108,7 +108,7 @@ export const finalizado = (body: any, callback: Function) => {
                     arquivo[0] = 'Partida Finalizada.'
                 }
                 fs.writeFileSync(caminhoArquivo, arquivo.join('\n'))
-                callback(null, !achou, 'Você terminou em ' + tempo)
+                callback(null, true, 'Você terminou em ' + tempo)
             }
             else {
                 callback(null, false, "Esse jogador não está na partida.")
@@ -161,10 +161,10 @@ export const rotaResultado = (body: any, callback: Function) => {
                 const minutos = Math.floor(segundos / 60);
                 item.Tempo = minutos + ' minuto(s) e ' + Math.floor(segundos - minutos * 60) + ' segundo(s)'
             })
-            callback(null, '', table)
+            callback(null, true, '', table)
         }
         else {
-            callback(null, 'A partida não foi finalizada.', [])
+            callback(null, false,'A partida não foi finalizada.', [])
         }
     }
     catch(err) {

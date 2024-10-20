@@ -103,7 +103,7 @@ routes.post('/validar-resultados', (req: Request, res: Response) => {
             });
         }
         else {
-            usuarioService.rotaResultado(body, (err: any, message: string, table: Array<any>) => {
+            usuarioService.rotaResultado(body, (err: any, partidaFinalizada: boolean, message: string, table: Array<any>) => {
                 if (err) {
                     res.status(400).json({
                         "statusCode": 400,
@@ -113,6 +113,7 @@ routes.post('/validar-resultados', (req: Request, res: Response) => {
                 else {
                     res.status(200).json({
                         "statusCode": 200,
+                        "partidaFinalizada": partidaFinalizada,
                         "message": message,
                         'resultados': table
                     })

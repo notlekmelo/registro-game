@@ -306,6 +306,9 @@
                 "statusCode": {
                     "type": "integer"
                 },
+                "partidaFinalizada": {
+                    "type": "boolean"
+                },
                 "message": {
                     "type": "string"
                 },
