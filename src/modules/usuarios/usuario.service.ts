@@ -108,7 +108,7 @@ export const finalizado = (body: any, callback: Function) => {
                     arquivo[0] = 'Partida Finalizada.'
                 }
                 fs.writeFileSync(caminhoArquivo, arquivo.join('\n'))
-                callback(null, true, 'Você terminou em ' + tempo)
+                callback(null, !achou, 'Você terminou em ' + tempo)
             }
             else {
                 callback(null, false, "Esse jogador não está na partida.")
