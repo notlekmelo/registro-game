@@ -20,7 +20,7 @@ export const validarInicioJogo = (body: any, callback: Function) => {
                 const diferencaTempo = (agora.getTime() - horaUltimoJogador.getTime()) / 1000;
                 const quantidadeJogadores = Number(arquivo[arquivo.length-2].substring(8,9)) + 1;
 
-                if (diferencaTempo > 10 && quantidadeJogadores > 2) {
+                if (diferencaTempo > 15 && quantidadeJogadores > 2) {
                     callback(null, 0, 'A partida já vai iniciar, aguarde a próxima partida.')
                 }
                 else if (quantidadeJogadores == 6) {
@@ -59,7 +59,7 @@ export const verificarInicio = (body: any, callback: Function) => {
 
                 const diferencaTempo = (agora.getTime() - ultimaInscricao.getTime()) / 1000
 
-                if (quantidadeJogadores >= 2 && diferencaTempo >= 10) {
+                if (quantidadeJogadores >= 2 && diferencaTempo >= 15) {
                     arquivo[0] = 'Partida iniciada!';
                     arquivo[body.NumeroJogador] += ' ;' + new Date().toISOString();
                     fs.writeFileSync(caminhoArquivo, arquivo.join('\n'))
